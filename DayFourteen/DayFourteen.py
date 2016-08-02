@@ -1,15 +1,30 @@
 import re
 
 
+def get_point_leader_at_time(speed_data_string, time):
+    speed_data = parse_speed_data(speed_data_string)
+    scores = dict.fromkeys(speed_data.keys(), 0)
+
+    for second in range(1, time + 1):
+        (leaders, position) = get_leaders_at_time(speed_data, second)
+        for leader in leaders:
+            scores[leader] += 1
+    leader = max(scores, key=scores.get)
+    return leader, scores[leader]
+
+
 def get_leader_at_time(speed_data_string, time):
     speed_data = parse_speed_data(speed_data_string)
-    position_data = {}
+    return get_leaders_at_time(speed_data, time)
 
+
+def get_leaders_at_time(speed_data, time):
+    position_data = {}
     for racer in speed_data.keys():
         position_data[racer] = get_distance_travelled(speed_data[racer], time)
-
-    leader = max(position_data, key=position_data.get)
-    return leader, position_data[leader]
+    max_distance = max(position_data.values())
+    leaders = [key for (key, value) in position_data.items() if value == max_distance]
+    return leaders, max_distance
 
 
 def parse_speed_data(speed_data_string):
@@ -21,6 +36,7 @@ def parse_speed_data(speed_data_string):
                       "stamina": int(match.group(3)),
                       "rest": int(match.group(4))}
     return res
+
 
 def get_distance_travelled(racer_data, time):
     cycle_time = racer_data["stamina"] + racer_data["rest"]
@@ -39,3 +55,6 @@ test_input = "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 s
 
 print "Example 1 test: " + str(get_leader_at_time(test_input, 1000))
 print "Final result: " + str(get_leader_at_time((open("./input")).read(), 2503))
+
+print "Example 2 test: " + str(get_point_leader_at_time(test_input, 1000))
+print "Part 2 Final result:" + str(get_point_leader_at_time((open("./input")).read(), 2503))
