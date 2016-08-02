@@ -23,3 +23,4 @@ def look_and_say(number_sequence, remaining_iterations):
 
 print "Example 1 test: " + look_and_say('1', 5)
 print "Final result: " + str(len(look_and_say('3113322113', 40)))
+print "Part 2 Final result: " + str(len(look_and_say('3113322113', 50)))

@@ -1,11 +1,20 @@
-def calculate_number_of_houses_visited(input_data):
+def calculate_number_of_houses_visited(input_data, robo_santa_enabled=False):
     coordinates = (0, 0)
+    robo_coordinates = (0, 0)
+
     house_map = {}
     add_house_to_map(house_map, coordinates)
 
+    count = 0
     for c in input_data:
-        coordinates = update_coordinates(c, coordinates)
-        add_house_to_map(house_map, coordinates)
+        if count % 2 == 0:
+            coordinates = update_coordinates(c, coordinates)
+            add_house_to_map(house_map, coordinates)
+        else:
+            robo_coordinates = update_coordinates(c, robo_coordinates)
+            add_house_to_map(house_map, robo_coordinates)
+
+        count += 1 if robo_santa_enabled else 0
 
     return sum_houses_in_map(house_map)
 
@@ -40,3 +49,8 @@ print "Example 1 test: " + str(calculate_number_of_houses_visited(">"))
 print "Example 2 test: " + str(calculate_number_of_houses_visited("^>v<"))
 print "Example 3 test: " + str(calculate_number_of_houses_visited("^v^v^v^v^v"))
 print "Final result: " + str(calculate_number_of_houses_visited((open("./input")).read()))
+
+print "Part 2 Example 1 test: " + str(calculate_number_of_houses_visited("^>", True))
+print "Part 2 Example 2 test: " + str(calculate_number_of_houses_visited("^>v<", True))
+print "Part 2 Example 3 test: " + str(calculate_number_of_houses_visited("^v^v^v^v^v", True))
+print "Part 2 Final result: " + str(calculate_number_of_houses_visited((open("./input")).read(), True))

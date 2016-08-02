@@ -13,7 +13,7 @@ def process_instructions(instructions):
 
 def parse_instruction(instruction):
     match = re.search("(.*) (\d+),(\d+) through (\d+),(\d+)", instruction)
-    command = get_command_function(match.group(1))
+    command = get_command_function_part2(match.group(1))
     start = (int(match.group(2)), int(match.group(3)))
     end = (int(match.group(4)), int(match.group(5)))
     return command, start, end
@@ -28,6 +28,15 @@ def get_command_function(command):
         return lambda x: False
 
 
+def get_command_function_part2(command):
+    if command == "turn on":
+        return lambda x: x + 1
+    elif command == "toggle":
+        return lambda x: x + 2
+    elif command == "turn off":
+        return lambda x: x - 1 if x > 0 else 0
+
+
 def execute_instruction(grid, (func, (x1, y1), (x2, y2))):
     for light_row in grid[x1:x2 + 1]:
         light_row[y1:y2 + 1] = [func(val) for val in light_row[y1:y2 + 1]]
@@ -37,5 +46,8 @@ test_instructions = "turn on 0,0 through 999,999\n" \
                     "toggle 0,0 through 999,0\n" \
                     "turn off 499,499 through 500,500"
 
-print "Example 1 test: " + str(process_instructions(test_instructions))
+test_instructions_part2 = "turn on 0,0 through 0,0\n" \
+                          "toggle 0,0 through 999,999"
+
+print "Example 1 test: " + str(process_instructions(test_instructions_part2))
 print "Final result: " + str(process_instructions((open("./input")).read()))

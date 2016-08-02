@@ -1,10 +1,17 @@
-def find_excess_string_length(input_data):
-    total = 0
-    for line in input_data.splitlines():
-        total += len(line)
-        total -= len(line[1:-1].decode('string_escape'))
+import re
 
-    return total
+def find_excess_string_length(input_data):
+    total_part1 = 0
+    total_part2 = 0
+
+    for line in input_data.splitlines():
+        total_part1 += len(line)
+        total_part1 -= len(line[1:-1].decode('string_escape'))
+
+        total_part2 += len('"' + re.escape(line) + '"')
+        total_part2 -= len(line)
+
+    return total_part1, total_part2
 
 
 test_strings = "\"\"\n" \

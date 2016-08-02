@@ -7,7 +7,8 @@ def solve_traveling_santa_problem(input_data):
     route_lengths = calculate_distance_for_each_path(distance_between_points)
 
     min_route = min(route_lengths, key=route_lengths.get)
-    return min_route, route_lengths[min_route]
+    max_route = max(route_lengths, key=route_lengths.get)
+    return min_route, route_lengths[min_route], max_route, route_lengths[max_route]
 
 
 def parse_input(input_data):

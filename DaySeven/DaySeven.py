@@ -100,3 +100,4 @@ test_instructions = "123 -> x\n" \
 
 print "Example 1 test: " + str(run_logic(test_instructions))
 print "Final result: " + str(run_logic((open("./input")).read())['a'])
+print "Part 2 Final result: " + str(run_logic((open("./input_part2")).read())['a'])
