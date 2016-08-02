@@ -43,3 +43,4 @@ print "Example 8 test: " + find_next_password('abcdefgh')
 print "Example 9 test: " + find_next_password('ghijklmn')
 
 print "Final result: " + find_next_password('cqjxjnds')
+print "Part 2 Final result: " + find_next_password('cqjxxyzz')
