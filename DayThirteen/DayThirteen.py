@@ -56,3 +56,4 @@ test_data = "Alice would gain 54 happiness units by sitting next to Bob.\n" \
 
 print "Example 1 test: " + str(get_max_happiness(test_data))
 print "Final result: " + str(get_max_happiness((open("./input")).read()))
+print "Part 2 Final result: " + str(get_max_happiness((open("./input_part2")).read()))
