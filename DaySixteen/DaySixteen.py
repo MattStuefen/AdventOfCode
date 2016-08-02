@@ -1,11 +1,20 @@
-def find_sue(sue_list_string, mfcsam_data):
+def find_sue(sue_list_string, mfcsam_data, part2=False):
     # Assume first perfect match is the real sue:
     sue_list = parse_sue_list(sue_list_string)
     for sue in sue_list:
         is_correct_sue = True
 
-        for item in sue:
-            is_correct_sue &= sue[item] == mfcsam_data[item]
+        if not part2:
+            for item in sue:
+                is_correct_sue &= sue[item] == mfcsam_data[item]
+        else:
+            for item in sue:
+                if item == 'cats' or item == 'trees':
+                    is_correct_sue &= sue[item] > mfcsam_data[item]
+                elif item == 'pomeranians' or item == 'goldfish':
+                    is_correct_sue &= sue[item] < mfcsam_data[item]
+                else:
+                    is_correct_sue &= sue[item] == mfcsam_data[item]
 
         if is_correct_sue:
             return sue_list.index(sue) + 1
@@ -37,4 +46,5 @@ mfcsam_output = {"children": 3,
                  "cars": 2,
                  "perfumes": 1}
 
-print "test" + str(find_sue((open("./input")).read(), mfcsam_output))
+print "Final result: " + str(find_sue((open("./input")).read(), mfcsam_output))
+print "Part 2 Final result: " + str(find_sue((open("./input")).read(), mfcsam_output, True))
