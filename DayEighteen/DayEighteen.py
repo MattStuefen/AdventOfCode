@@ -1,14 +1,24 @@
 __author__ = 'Matt'
 
-def animate_yard(input, num_cycles):
+
+def animate_yard(input, num_cycles, part2=False):
     light_grid = init_light_grid(input)
+    if part2: turn_corners_on(light_grid)
     for i in range(num_cycles):
         light_grid = update_light_grid(light_grid)
+        if part2: turn_corners_on(light_grid)
     return sum([sum(row) for row in light_grid])
 
 
 def init_light_grid(input):
     return [[c == '#' for c in line] for line in input.splitlines()]
+
+
+def turn_corners_on(light_grid):
+    light_grid[0][0] = True
+    light_grid[len(light_grid) - 1][0] = True
+    light_grid[0][len(light_grid[0]) - 1] = True
+    light_grid[len(light_grid) - 1][len(light_grid[0]) - 1] = True
 
 
 def update_light_grid(light_grid):
@@ -49,6 +59,8 @@ light_grid_string = ".#.#.#\n" \
                     "#.#..#\n" \
                     "####..\n"
 
-
 print "Example 1 test: " + str(animate_yard(light_grid_string, 4))
 print "Final result: " + str(animate_yard((open("./input")).read(), 100))
+
+print "Part 2 Example 1 test: " + str(animate_yard(light_grid_string, 5, True))
+print "Part 2 Final result: " + str(animate_yard((open("./input")).read(), 100, True))
