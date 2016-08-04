@@ -1,12 +1,6 @@
 {
   "Weapons": [
     {
-      "Name": "Nothing",
-      "Cost": 0,
-      "Damage": 0,
-      "Armor": 0
-    },
-    {
       "Name": "Dagger",
       "Cost": 8,
       "Damage": 4,

@@ -2,9 +2,9 @@ import json
 import itertools
 
 
-def find_min_equipment_cost(base_player_stats, base_boss_stats, shop_data):
-    final_cost = []
-    set_up = []
+def find_equipment_cost(base_player_stats, base_boss_stats, shop_data):
+    final_cost = [65535, 0]
+    set_up = [[], []]
     for i in range(len(shop_data['Weapons'])):
         for j in range(len(shop_data['Armor'])):
             for (k, l) in itertools.combinations(range(len(shop_data['Rings'])), 2):
@@ -17,21 +17,28 @@ def find_min_equipment_cost(base_player_stats, base_boss_stats, shop_data):
                 cost += equip_item(player, shop_data['Rings'][k])
                 cost += equip_item(player, shop_data['Rings'][l])
 
-                if fight(player, boss) and cost < final_cost:
-                    final_cost = cost
-                    set_up = [shop_data['Weapons'][i]["Name"],
-                              shop_data['Armor'][j]["Name"],
-                              shop_data['Rings'][k]["Name"],
-                              shop_data['Rings'][l]["Name"]]
+                if fight(player, boss):
+                    if cost < final_cost[0]:
+                        final_cost[0] = cost
+                        set_up[0] = [shop_data['Weapons'][i]["Name"],
+                                     shop_data['Armor'][j]["Name"],
+                                     shop_data['Rings'][k]["Name"],
+                                     shop_data['Rings'][l]["Name"]]
+                else:
+                    if cost > final_cost[1]:
+                        final_cost[1] = cost
+                        set_up[1] = [shop_data['Weapons'][i]["Name"],
+                                     shop_data['Armor'][j]["Name"],
+                                     shop_data['Rings'][k]["Name"],
+                                     shop_data['Rings'][l]["Name"]]
 
-    return final_cost, set_up
+    return (final_cost[0], set_up[0]), (final_cost[1], set_up[1])
 
 
 def equip_item(player, item):
     player['Armor'] += item['Armor']
     player['Damage'] += item['Damage']
     return item['Cost']
-
 
 
 def fight(player, boss):
@@ -51,10 +58,11 @@ def calculate_damage(fighter_a, fighter_b):
         damage = 1
     return damage
 
+
 boss_stats = {line.split(': ')[0]: int(line.split(': ')[1]) for line in open("./input").read().splitlines()}
 player_stats = {'Armor': 0, 'Damage': 0, 'Hit Points': 100}
 
 example_fight = fight({'Armor': 5, 'Damage': 5, 'Hit Points': 8}, {'Armor': 2, 'Damage': 7, 'Hit Points': 12})
 
 print "Example 1 test: " + ("Win" if example_fight else "Lose")
-print "Final result: " + str(find_min_equipment_cost(player_stats, boss_stats, json.load(open('./shop_data.json'))))
+print "Final result: " + str(find_equipment_cost(player_stats, boss_stats, json.load(open('./shop_data.json'))))
