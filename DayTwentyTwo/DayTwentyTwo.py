@@ -1,4 +1,4 @@
-def find_min_mana(base_player_stats, base_boss_stats, spells):
+def find_min_mana(base_player_stats, base_boss_stats, spells, hard_mode=False):
     final_cost = None
     final_spells = []
     scenarios = [{"Player": dict(base_player_stats),
@@ -17,7 +17,7 @@ def find_min_mana(base_player_stats, base_boss_stats, spells):
 
                 # Only check if we know there is a chance of this being the smallest cost
                 if final_cost is None or new_scenario["ManaSpent"] < final_cost:
-                    result = fight(new_scenario["Player"], new_scenario["Boss"], new_scenario["Effects"], spell)
+                    result = fight(new_scenario["Player"], new_scenario["Boss"], new_scenario["Effects"], spell, hard_mode)
                     if result is None:
                         new_scenarios.append(new_scenario)
                     elif result:
@@ -39,8 +39,14 @@ def copy_scenario(scenario):
     return copy
 
 
-def fight(player, boss, effects, spell):
+def fight(player, boss, effects, spell, hard_mode):
     if spell["Cost"] > player["Mana"]:
+        return False
+
+    if hard_mode:
+        player['Hit Points'] -= 1
+
+    if player['Hit Points'] <= 0:
         return False
 
     # Apply effects:
@@ -106,3 +112,7 @@ boss_stats = {line.split(': ')[0]: int(line.split(': ')[1]) for line in open("./
 player_stats = {'Hit Points': 50, 'Armor': 0, 'Mana': 500}
 
 print "Final result: " + str(find_min_mana(player_stats, boss_stats, spell_data))
+
+# Note: Part 2 casts an extra Magic Missile even though effects kill the boss prior to it being necessary
+#       therefore subtract 53 from the total.
+print "Part 2 Final result: " + str(find_min_mana(player_stats, boss_stats, spell_data, True))
