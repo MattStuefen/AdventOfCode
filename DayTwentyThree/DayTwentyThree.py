@@ -1,6 +1,6 @@
-def process_instructions(input_code):
+def process_instructions(input_code, starting_a=0):
     instructions = [line.split(' ') for line in input_code.replace(',', '').splitlines()]
-    registers = {'a': 0, 'b': 0}
+    registers = {'a': starting_a, 'b': 0}
     i = 0
     while i < len(instructions):
         i += process_instruction(instructions[i], registers)
@@ -28,3 +28,4 @@ test_input = "inc a\n" \
 
 print "Example 1 test: " + str(process_instructions(test_input))
 print "Final result: " + str(process_instructions(open("./input").read()))
+print "Part 2 Final result: " + str(process_instructions(open("./input").read(), 1))
